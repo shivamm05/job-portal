@@ -79,9 +79,11 @@ import Navbar from "./components/Navbar";
 import RecruiterLogin from "./components/RecruiterLogin";
 import { AppContext } from "./context/AppContent";
 import 'quill/dist/quill.snow.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
-  const { showRecruiterLogin } = useContext(AppContext);
+  const { showRecruiterLogin , companyToken} = useContext(AppContext);
   const location = useLocation();
 
   // Hide Navbar for dashboard pages
@@ -91,6 +93,7 @@ const App = () => {
     <div className="min-h-screen">
       {!hideNavbar && <Navbar />}
       {showRecruiterLogin && <RecruiterLogin />}
+      <ToastContainer/>
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -99,9 +102,13 @@ const App = () => {
 
         {/* Dashboard nested routes */}
         <Route path="/dashboard/*" element={<Dashboard />}>
-          <Route path="add-job" element={<AddJob />} />
+        {companyToken?<>
+           <Route path="add-job" element={<AddJob />} />
           <Route path="manage-jobs" element={<ManageJobs />} />
           <Route path="view-applications" element={<ViewApplications />} />
+        </>:null
+        }
+          
         </Route>
       </Routes>
     </div>
